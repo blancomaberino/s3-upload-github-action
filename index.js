@@ -10,13 +10,19 @@ const s3 = new aws.S3({
 });
 
 const uploadFile = (fileName) => {
+  if (fileName instanceof Array === true) {
+    for (let i = 0; i < fileName.length; i++) {
+      uploadFile(`${fileName[i]}`);
+    }
+    return;
+  } 
   if (fs.lstatSync(fileName).isDirectory()) {
     fs.readdirSync(fileName).forEach((file) => {
       uploadFile(`${fileName}/${file}`);
     });
   } else {
     const fileContent = fs.readFileSync(fileName);
-
+    console.log(`Normalized path: ${process.env.S3_PREFIX || ""}/${path.normalize(fileName)}`);
     // Setting up S3 upload parameters
     const params = {
       Bucket: process.env.S3_BUCKET,
@@ -38,4 +44,10 @@ const uploadFile = (fileName) => {
   }
 };
 
-uploadFile(process.env.FILE);
+if (process.env.FILES) {
+  uploadFile(process.env.FILES);
+} else {
+  uploadFile(process.env.FILE);
+}
+
+
