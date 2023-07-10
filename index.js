@@ -22,11 +22,11 @@ const uploadFile = (fileName) => {
     });
   } else {
     const fileContent = fs.readFileSync(fileName);
-    console.log(`Normalized path: ${process.env.S3_PREFIX || ""}/${path.normalize(fileName)}`);
+    console.log(`Normalized path: ${process.env.S3_PREFIX || ""}${path.normalize(fileName)}`);
     // Setting up S3 upload parameters
     const params = {
       Bucket: process.env.S3_BUCKET,
-      Key: `${process.env.S3_PREFIX || ""}/${path.normalize(fileName)}`,
+      Key: `${process.env.S3_PREFIX || ""}${path.normalize(fileName)}`,
       Body: fileContent,
     };
     const acl = process.env.S3_ACL;
