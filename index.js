@@ -31,8 +31,23 @@ const uploadFile = (fileName, avoidHiddenFiles = false) => {
     const params = {
       Bucket: process.env.S3_BUCKET,
       Key: `${process.env.S3_PREFIX || ""}${path.normalize(fileName)}`,
-      Body: fileContent,
+      Body: fileContent
     };
+    const extension = fileName.match(/\.(.{2,4})$/)[1] || null;
+    let contentType = null;
+    if (extension) {
+      switch (extension) {
+        case 'html': contentType = 'text/html'; break;
+        case 'css': contentType = 'text/css'; break;
+        case 'js': contentType = 'text/javascript'; break;
+        case 'svg': contentType = 'image/svg+xml'; break;
+        case 'png': contentType = 'image/x-png'; break;
+        case 'jpg': contentType = 'image/jpeg'; break;
+      }
+    }
+    if (contentType) {
+      params[contentType] = contentType;
+    }
     const acl = process.env.S3_ACL;
     if (acl) {
       params.ACL = acl;
