@@ -9,16 +9,19 @@ const s3 = new aws.S3({
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
 });
 
-const uploadFile = (fileName) => {
+const uploadFile = (fileName, avoidHiddenFiles = false) => {
   if (fileName instanceof Array === true) {
     for (let i = 0; i < fileName.length; i++) {
-      uploadFile(`${fileName[i]}`);
+      uploadFile(`${fileName[i]}`, avoidHiddenFiles);
     }
     return;
   } 
+  if (avoidHiddenFiles && fileName.match(/\.[^\.]+/) {
+    return;
+  }
   if (fs.lstatSync(fileName).isDirectory()) {
     fs.readdirSync(fileName).forEach((file) => {
-      uploadFile(`${fileName}/${file}`);
+      uploadFile(`${fileName}/${file}`, avoidHiddenFiles);
     });
   } else {
     const fileContent = fs.readFileSync(fileName);
@@ -44,10 +47,6 @@ const uploadFile = (fileName) => {
   }
 };
 
-if (process.env.FILES) {
-  uploadFile(process.env.FILES);
-} else {
-  uploadFile(process.env.FILE);
-}
+uploadFile(process.env.FILE, process.env.AVOID_HIDDEN);
 
 
