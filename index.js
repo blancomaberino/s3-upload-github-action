@@ -16,7 +16,7 @@ const uploadFile = (fileName, avoidHiddenFiles = false) => {
     }
     return;
   } 
-  if (avoidHiddenFiles && fileName.replace(/^\.\//, '').match(/\.[^\.]+/)) {
+  if (avoidHiddenFiles && fileName.match(/(^|\/)\.[^\.]+/)) {
     console.log(fileName);
     return;
   }
