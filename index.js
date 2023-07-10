@@ -16,7 +16,7 @@ const uploadFile = (fileName, avoidHiddenFiles = false) => {
     }
     return;
   } 
-  if (avoidHiddenFiles && fileName.match(/\.[^\.]+/) {
+  if (avoidHiddenFiles && fileName.match(/\.[^\.]+/)) {
     return;
   }
   if (fs.lstatSync(fileName).isDirectory()) {
