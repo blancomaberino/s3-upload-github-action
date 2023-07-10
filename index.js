@@ -47,7 +47,7 @@ const uploadFile = (fileName, avoidHiddenFiles = false) => {
       }
     }
     if (contentType) {
-      params[contentType] = contentType;
+      params.ContentType = contentType;
     }
     const acl = process.env.S3_ACL;
     if (acl) {
