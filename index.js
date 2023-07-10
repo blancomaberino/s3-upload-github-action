@@ -33,7 +33,8 @@ const uploadFile = (fileName, avoidHiddenFiles = false) => {
       Key: `${process.env.S3_PREFIX || ""}${path.normalize(fileName)}`,
       Body: fileContent
     };
-    const extension = fileName.match(/\.(.{2,4})$/)[1] || null;
+    let extension = fileName.match(/\.(.{2,4})$/);
+    extension = extension && extension.length > 1 ? extension[1] : null;
     let contentType = null;
     if (extension) {
       switch (extension) {
